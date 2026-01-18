@@ -1,7 +1,7 @@
 from typing import Dict, List, Optional
-from .confluence_client import ConfluenceClient
-from ..retrieval.chunking import html_to_text, chunk_text
-from ..retrieval.rerank import rerank
+from confluence_agentic_rag.tools.confluence_client import ConfluenceClient
+from confluence_agentic_rag.retrieval.chunking import html_to_text, chunk_text
+from confluence_agentic_rag.retrieval.rerank import rerank
 
 
 def build_cql(space_key: Optional[str], query_hint: str) -> str:

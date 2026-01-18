@@ -1,15 +1,11 @@
 from __future__ import annotations
 
+from weaviate.classes.config import DataType, Property
+
 
 def ensure_schema(client) -> None:
-    """
-    Creates ConfluenceChunk collection if it doesn't exist.
-    Uses Weaviate v4 client config classes (data_type not dataType).
-    """
-    from weaviate.classes.config import Property, DataType, Configure
-
-    # list existing collections
-    existing = set(client.collections.list_all().keys())
+    """Create ConfluenceChunk collection if it doesn't exist."""
+    existing = client.collections.list_all()
     if "ConfluenceChunk" in existing:
         return
 
@@ -23,6 +19,5 @@ def ensure_schema(client) -> None:
             Property(name="space_key", data_type=DataType.TEXT),
             Property(name="version", data_type=DataType.INT),
         ],
-        # We supply vectors ourselves (sentence-transformers), so disable internal vectorizer:
-        vectorizer_config=Configure.Vectorizer.none(),
+        vectorizer_config=None,  # we provide vectors ourselves
     )

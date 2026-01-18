@@ -1,4 +1,4 @@
-from .base import LLM
+from confluence_agentic_rag.llm.base import LLM
 
 
 class StubLLM(LLM):

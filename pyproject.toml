@@ -39,3 +39,6 @@ dev = [
     "pytest>=9.0.2",
     "ruff>=0.14.13",
 ]
+
+[tool.flake8]
+max-line-length = 88

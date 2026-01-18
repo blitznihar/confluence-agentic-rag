@@ -14,7 +14,7 @@ from rich.console import Console
 
 from confluence_agentic_rag.config import Settings
 from confluence_agentic_rag.tools.confluence_client import ConfluenceClient
-from confluence_agentic_rag.agent.orchestrator import answer
+from confluence_agentic_rag.agent.orchestrator import _normalize_url, answer
 from confluence_agentic_rag.llm.stub import StubLLM
 from vectorstore.weaviate_store import WeaviateStore
 from ingest.ingest_confluence import ingest_space_decisions
@@ -68,7 +68,7 @@ def _handle_ask(args: argparse.Namespace, settings: Settings, store: WeaviateSto
     console.print("\n[bold]Top Sources:[/bold]")
     for s in out.get("sources", [])[:5]:
         title = s.get("title", "")
-        url = s.get("url", "")
+        url = _normalize_url(s.get("url", "") or "")
         distance = s.get("distance", 0.0)
         console.print(f"- {title} ({url}) distance={distance:.4f}")
 
