@@ -1,5 +1,10 @@
 # Confluence Agentic RAG (Weaviate + UV)
 
+[![CI (lint + test)](https://github.com/blitznihar/confluence-agentic-rag/actions/workflows/pylint.yml/badge.svg)](https://github.com/blitznihar/confluence-agentic-rag/actions/workflows/pylint.yml)
+[![codecov](https://codecov.io/github/blitznihar/confluence-agentic-rag/graph/badge.svg?token=CxxB9Ew6Lx)](https://codecov.io/github/blitznihar/confluence-agentic-rag)
+![License](https://img.shields.io/github/license/blitznihar/confluence-agentic-rag)
+
+
 A production-style **Agentic RAG** starter project that ingests Confluence Cloud pages into a local **Weaviate vector database**, then answers questions using **semantic retrieval** + citations.
 
 This project is designed for enterprise use cases like:
