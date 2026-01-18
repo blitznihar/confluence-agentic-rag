@@ -4,7 +4,9 @@
 [![codecov](https://codecov.io/github/blitznihar/confluence-agentic-rag/graph/badge.svg?token=CxxB9Ew6Lx)](https://codecov.io/github/blitznihar/confluence-agentic-rag)
 ![Python](https://img.shields.io/badge/python-3.11%2B-blue)
 ![Last Commit](https://img.shields.io/github/last-commit/blitznihar/confluence-agentic-rag)
-![License](https://img.shields.io/github/license/blitznihar/confluence-agentic-rag)
+![License](https://img.shields.io/github/license/blitznihar/confluence-agentic-rag?cacheSeconds=0)
+![License](https://img.shields.io/badge/license-MIT-green)
+
 
 
 A production-style **Agentic RAG** starter project that ingests Confluence Cloud pages into a local **Weaviate vector database**, then answers questions using **semantic retrieval** + citations.
