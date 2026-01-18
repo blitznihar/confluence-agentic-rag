@@ -57,6 +57,5 @@ jobs:
         run: |
           uv run pylint src/confluence_agentic_rag
 
-      # Enable if/when you add tests
-      # - name: Pytest
-      #   run: uv run pytest -q
+      - name: Pytest
+        run: uv run pytest -q
