@@ -249,6 +249,8 @@ Planned improvements:
 - Decision Log structured extraction (DEC-ID, Date, Why, Options)
 
 ---
+https://codecov.io/github/blitznihar/confluence-agentic-rag/graphs/sunburst.svg?token=CxxB9Ew6Lx
+---
 
 ## License
 
