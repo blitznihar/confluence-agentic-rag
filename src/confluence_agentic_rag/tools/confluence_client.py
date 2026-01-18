@@ -19,9 +19,7 @@ class ConfluenceClient:
 
     def search_pages(self, cql: str, limit: int = 10) -> List[Dict[str, Any]]:
         url = f"{self.base_url}/wiki/rest/api/content/search"
-        r = self.session.get(url,
-                             params={"cql": cql, "limit": limit},
-                             timeout=30)
+        r = self.session.get(url, params={"cql": cql, "limit": limit}, timeout=30)
         r.raise_for_status()
         return r.json().get("results", [])
 
@@ -50,4 +48,3 @@ class ConfluenceClient:
             webui = "/" + webui
 
         return f"{self.base_url}{base_path}{webui}"
-

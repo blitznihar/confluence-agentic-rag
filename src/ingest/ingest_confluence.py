@@ -18,19 +18,21 @@ def ingest_space_decisions(
     limit_pages: int = 50,
 ) -> Dict[str, int]:
     """
-    Pulls pages likely to contain ADRs/decisions 
+    Pulls pages likely to contain ADRs/decisions
     and indexes them into Weaviate.
     """
     ensure_schema(store.client)
 
-    terms = ["ADR",
-             "Decision",
-             "Minutes",
-             "Architecture Decision",
-             "Agentic AI",
-             "Agentic AI Platform"]
+    terms = [
+        "ADR",
+        "Decision",
+        "Minutes",
+        "Architecture Decision",
+        "Agentic AI",
+        "Agentic AI Platform",
+    ]
     term_cql = " OR ".join([f'text ~ "{t}"' for t in terms])
-    cql = f'type=page AND ({term_cql})'
+    cql = f"type=page AND ({term_cql})"
     if space_key:
         cql += f' AND space="{space_key}"'
 
@@ -58,17 +60,19 @@ def ingest_space_decisions(
         vecs = _embed_model.encode(chs, normalize_embeddings=True)
 
         for chunk_text_i, vec in zip(chs, vecs):
-            to_upsert.append({
-                "properties": {
-                    "page_id": r["id"],
-                    "title": title,
-                    "url": url,
-                    "chunk": chunk_text_i,
-                    "space_key": space,
-                    "version": version_num,
-                },
-                "vector": vec.tolist(),
-            })
+            to_upsert.append(
+                {
+                    "properties": {
+                        "page_id": r["id"],
+                        "title": title,
+                        "url": url,
+                        "chunk": chunk_text_i,
+                        "space_key": space,
+                        "version": version_num,
+                    },
+                    "vector": vec.tolist(),
+                }
+            )
             chunks += 1
 
     store.upsert_chunks(to_upsert)

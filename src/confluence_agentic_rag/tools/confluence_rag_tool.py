@@ -7,13 +7,17 @@ from ..retrieval.rerank import rerank
 def build_cql(space_key: Optional[str], query_hint: str) -> str:
     # Tuned for "decisions / ADRs / minutes"
     decision_terms = [
-        "ADR", "Architecture Decision", "Decision", "Minutes", "Outcome",
-        "Agentic AI", "Agentic AI Platform", query_hint
+        "ADR",
+        "Architecture Decision",
+        "Decision",
+        "Minutes",
+        "Outcome",
+        "Agentic AI",
+        "Agentic AI Platform",
+        query_hint,
     ]
-    term_cql = " OR ".join(
-        [f'text ~ "{t}"' for t in decision_terms if t.strip()]
-    )
-    cql = f'type=page AND ({term_cql})'
+    term_cql = " OR ".join([f'text ~ "{t}"' for t in decision_terms if t.strip()])
+    cql = f"type=page AND ({term_cql})"
     if space_key:
         cql += f' AND space="{space_key}"'
     return cql
@@ -51,10 +55,7 @@ def confluence_decision_rag(
     top = rerank(question, chunks, top_k=top_k_chunks)
 
     context = "\n\n".join(
-        [
-            f"Source: {t['title']} ({t['url']})\nExcerpt: {t['chunk']}"
-            for t in top
-        ]
+        [f"Source: {t['title']} ({t['url']})\nExcerpt: {t['chunk']}" for t in top]
     )
 
     return {"context": context, "sources": top, "cql": cql}

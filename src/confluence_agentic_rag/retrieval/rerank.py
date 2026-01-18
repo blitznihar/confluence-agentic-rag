@@ -9,8 +9,7 @@ def rerank(question: str, items: List[Dict], top_k: int = 8) -> List[Dict]:
     if not items:
         return []
     qv = _model.encode([question], normalize_embeddings=True)[0]
-    cv = _model.encode([it["chunk"] for it in items],
-                       normalize_embeddings=True)
+    cv = _model.encode([it["chunk"] for it in items], normalize_embeddings=True)
     scores = cv @ qv
     idx = np.argsort(-scores)[:top_k]
     out = []

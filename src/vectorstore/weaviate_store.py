@@ -11,10 +11,7 @@ class WeaviateStore:
         self.grpc_port = grpc_port
 
         self.client = weaviate.WeaviateClient(
-            connection_params=ConnectionParams.from_url(
-                self.http_url,
-                grpc_port=self.grpc_port
-            )
+            connection_params=ConnectionParams.from_url(self.http_url, grpc_port=self.grpc_port)
         )
         self.client.connect()
 
@@ -30,8 +27,7 @@ class WeaviateStore:
         col = self.client.collections.get("ConfluenceChunk")
         with col.batch.dynamic() as batch:
             for item in chunks:
-                batch.add_object(properties=item["properties"],
-                                 vector=item["vector"])
+                batch.add_object(properties=item["properties"], vector=item["vector"])
 
     def semantic_search(
         self,
@@ -46,9 +42,8 @@ class WeaviateStore:
         filters = None
         if where_filter and "space_key" in where_filter:
             from weaviate.classes.query import Filter
-            filters = Filter.by_property("space_key").equal(
-                where_filter["space_key"]
-                )
+
+            filters = Filter.by_property("space_key").equal(where_filter["space_key"])
 
         resp = col.query.near_vector(
             near_vector=query_vector,
@@ -60,13 +55,15 @@ class WeaviateStore:
         out = []
         for obj in resp.objects:
             props = obj.properties
-            out.append({
-                "page_id": props.get("page_id"),
-                "title": props.get("title"),
-                "url": props.get("url"),
-                "chunk": props.get("chunk"),
-                "space_key": props.get("space_key"),
-                "version": props.get("version"),
-                "distance": obj.metadata.distance,
-            })
+            out.append(
+                {
+                    "page_id": props.get("page_id"),
+                    "title": props.get("title"),
+                    "url": props.get("url"),
+                    "chunk": props.get("chunk"),
+                    "space_key": props.get("space_key"),
+                    "version": props.get("version"),
+                    "distance": obj.metadata.distance,
+                }
+            )
         return out

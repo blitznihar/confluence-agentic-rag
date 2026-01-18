@@ -6,9 +6,7 @@ def html_to_text(html: str) -> str:
     return soup.get_text(separator="\n")
 
 
-def chunk_text(text: str,
-               max_chars: int = 1200,
-               overlap: int = 200) -> list[str]:
+def chunk_text(text: str, max_chars: int = 1200, overlap: int = 200) -> list[str]:
     text = " ".join((text or "").split())
     if not text:
         return []
