@@ -45,19 +45,24 @@ def main():
                                          store,
                                          space_key=space_key,
                                          limit_pages=args.limit)
-            print(f"[bold green]Done.[/bold green] Pages={out['pages_indexed']} Chunks={out['chunks_indexed']}")
+            pages = out['pages_indexed']
+            chunks = out['chunks_indexed']
+            print(f"[bold green]Done.[/bold green] Pages={pages} "
+                  f"Chunks={chunks}")
 
         elif args.cmd == "ask":
             space_key = args.space or settings.confluence_space_key
-            out = answer(args.question, store=store, llm=llm, space_key=space_key, top_k=args.topk)
+            out = answer(args.question,
+                         store=store,
+                         llm=llm,
+                         space_key=space_key,
+                         top_k=args.topk)
             print("\n[bold]Answer:[/bold]")
             print(out["answer"])
             print("\n[bold]Top Sources:[/bold]")
             for s in out.get("sources", [])[:5]:
-                print(f"- {s['title']} ({s['url']}) distance={s['distance']:.4f}")
+                title = s['title']
+                url = s['url']
+                print(f"- {title} ({url}) distance={s['distance']:.4f}")
     finally:
         store.close()
-
-
-# def main():
-#     print("carag is working!")

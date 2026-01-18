@@ -4,10 +4,10 @@ A production-style **Agentic RAG** starter project that ingests Confluence Cloud
 
 This project is designed for enterprise use cases like:
 
-> ✅ “Find what we decided”  
-> ✅ “Summarize architecture decisions”  
-> ✅ “What is our RAG knowledge architecture?”  
-> ✅ “What are our governance guardrails for agents?”
+> "Find what we decided"  
+> "Summarize architecture decisions"  
+> "What is our RAG knowledge architecture?"  
+> "What are our governance guardrails for agents?"
 
 ---
 
@@ -16,12 +16,13 @@ This project is designed for enterprise use cases like:
 In most enterprises, decisions and architecture knowledge live in documents (Confluence / SharePoint / PDFs), not databases.
 
 Traditional DB query patterns fail because:
+
 - decisions are written in **unstructured text**
-- phrasing varies (e.g., “Accounting Center” vs “AC”)
+- phrasing varies (e.g., "Accounting Center" vs "AC")
 - people want answers **with citations**
 - knowledge is distributed across many pages
 
-✅ **RAG is unavoidable** in these scenarios.
+**RAG is unavoidable** in these scenarios.
 
 ---
 
@@ -46,6 +47,7 @@ Traditional DB query patterns fail because:
 
 ## Project Structure
 
+```
 confluence-agentic-rag/
 ├── docker-compose.yml
 ├── pyproject.toml
@@ -71,9 +73,7 @@ confluence-agentic-rag/
 │ ├── base.py
 │ └── stub.py
 └── tests/
-
-yaml
-Copy code
+```
 
 ---
 
@@ -91,27 +91,33 @@ Copy code
 
 ```bash
 uv sync
-2) Start Weaviate (Local)
+```
+
+### 2) Start Weaviate (Local)
+
 Weaviate runs locally using Docker Compose.
 
-bash
-Copy code
+```bash
 docker compose up -d
+```
+
 Verify:
 
-bash
-Copy code
+```bash
 curl http://localhost:6060/v1/meta
-3) Configure environment variables
+```
+
+### 3) Configure environment variables
+
 Copy .env.example → .env
 
-bash
-Copy code
+```bash
 cp .env.example .env
+```
+
 Example:
 
-env
-Copy code
+```env
 CONFLUENCE_BASE_URL=https://<your-tenant>.atlassian.net
 CONFLUENCE_EMAIL=<your-atlassian-email>
 CONFLUENCE_API_TOKEN=<your-api-token>
@@ -119,120 +125,122 @@ CONFLUENCE_SPACE_KEY=AA
 
 WEAVIATE_URL=http://localhost:6060
 WEAVIATE_GRPC_PORT=6061
-How to get Confluence API Token
+```
+
+### How to get Confluence API Token
+
 Confluence Admin UI does NOT show API tokens.
 
 API Tokens are generated in Atlassian account settings:
 
-Go to Atlassian Account: Profile → Account Settings
+- Go to Atlassian Account: Profile → Account Settings
+- Security → API tokens
+- Create token → Copy token
 
-Security → API tokens
+---
 
-Create token → Copy token
+## Usage
 
-Usage
-Ingest Confluence pages
+### Ingest Confluence pages
+
 This pulls relevant Confluence pages (ADRs, minutes, decision logs) and stores them into Weaviate.
 
-bash
-Copy code
+```bash
 uv run carag ingest --space AA --limit 200
+```
+
 Expected output:
 
-ini
-Copy code
+```
 Done. Pages=11 Chunks=15
-Ask questions (Agentic RAG)
-bash
-Copy code
+```
+
+### Ask questions (Agentic RAG)
+
+```bash
 uv run carag ask "What is our RAG + Knowledge Architecture?" --space AA --topk 10
+```
+
 Output includes:
 
-Answer
+- Answer
+- Top sources + URLs
+- similarity distances
 
-Top sources + URLs
+---
 
-similarity distances
+## Example Questions (Best for Testing)
 
-Example Questions (Best for Testing)
 Use these questions to validate retrieval:
 
-Platform & Architecture
-“Summarize the Agentic AI Reference Architecture.”
+### Platform & Architecture
 
-“Explain our RAG + Knowledge Architecture and how Confluence is used.”
+- "Summarize the Agentic AI Reference Architecture."
+- "Explain our RAG + Knowledge Architecture and how Confluence is used."
 
-Governance
-“What guardrails, security, and privacy controls are required for agents?”
+### Governance
 
-“What is the ARB review process and required artifacts?”
+- "What guardrails, security, and privacy controls are required for agents?"
+- "What is the ARB review process and required artifacts?"
 
-Delivery
-“What is our SDLC for agents and CI/CD + DevSecOps standards?”
+### Delivery
 
-Operations
-“What monitoring and observability standards do we follow?”
+- "What is our SDLC for agents and CI/CD + DevSecOps standards?"
 
-“What is our token budget/cost management approach?”
+### Operations
 
-Notes / Troubleshooting
-1) 401 Unauthorized
+- "What monitoring and observability standards do we follow?"
+- "What is our token budget/cost management approach?"
+
+---
+
+## Notes / Troubleshooting
+
+### 1) 401 Unauthorized
+
 This means:
 
-wrong email / token
-
-wrong Confluence base URL
-
-token not loaded from .env
+- wrong email / token
+- wrong Confluence base URL
+- token not loaded from .env
 
 Test auth:
 
-bash
-Copy code
+```bash
 curl -u "EMAIL:API_TOKEN" \
   "https://<tenant>.atlassian.net/wiki/rest/api/space?limit=1"
-2) Duplicate URLs (double base URL issue)
+```
+
+### 2) Duplicate URLs (double base URL issue)
+
 If you previously ingested incorrect URLs, wipe the Weaviate data volume:
 
-bash
-Copy code
+```bash
 docker compose down
 docker volume rm confluence-agentic-rag_weaviate_data
 docker compose up -d
 uv run carag ingest --space AA --limit 200
-3) Vector store schema warning
-If you see warnings like:
-vectorizer_config deprecated
+```
 
-It’s safe to ignore during dev. A future improvement is switching to vector_config.
+### 3) Vector store schema warning
 
-Roadmap / Enhancements
+If you see warnings like `vectorizer_config deprecated`, it's safe to ignore during dev. A future improvement is switching to vector_config.
+
+---
+
+## Roadmap / Enhancements
+
 Planned improvements:
 
-✅ Deduplicate chunks (deterministic chunk UUIDs)
+- Deduplicate chunks (deterministic chunk UUIDs)
+- Incremental re-indexing by page version
+- LLM integration (OpenAI/Azure/Local LM)
+- Hybrid retrieval (Weaviate + live Confluence search fallback)
+- Better chunking (by headings + bullet blocks)
+- Decision Log structured extraction (DEC-ID, Date, Why, Options)
 
-✅ Incremental re-indexing by page version
+---
 
-✅ LLM integration (OpenAI/Azure/Local LM)
+## License
 
-✅ Hybrid retrieval (Weaviate + live Confluence search fallback)
-
-✅ Better chunking (by headings + bullet blocks)
-
-✅ Decision Log structured extraction (DEC-ID, Date, Why, Options)
-
-License
 MIT (or internal use)
-
-yaml
-Copy code
-
----
-
-## Also create `.env.example` (recommended)
-If you want, I’ll write your `.env.example` too.
-
----
-
-If you paste your current repo root files list (`ls` output), I can tailor the README to match **your exact structure and commands** (including Weaviate ports 6060/6061 and your real script name `carag`).
-::contentReference[oaicite:0]{index=0}
