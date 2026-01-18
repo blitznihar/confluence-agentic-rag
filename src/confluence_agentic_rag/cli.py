@@ -15,7 +15,6 @@ from vectorstore.weaviate_store import WeaviateStore
 from ingest.ingest_confluence import ingest_space_decisions
 
 
-
 def main():
     """
     Command-line interface entry point.
