@@ -2,6 +2,8 @@
 
 [![CI (lint + test)](https://github.com/blitznihar/confluence-agentic-rag/actions/workflows/pylint.yml/badge.svg)](https://github.com/blitznihar/confluence-agentic-rag/actions/workflows/pylint.yml)
 [![codecov](https://codecov.io/github/blitznihar/confluence-agentic-rag/graph/badge.svg?token=CxxB9Ew6Lx)](https://codecov.io/github/blitznihar/confluence-agentic-rag)
+![Python](https://img.shields.io/badge/python-3.11%2B-blue)
+![Last Commit](https://img.shields.io/github/last-commit/blitznihar/confluence-agentic-rag)
 ![License](https://img.shields.io/github/license/blitznihar/confluence-agentic-rag)
 
 

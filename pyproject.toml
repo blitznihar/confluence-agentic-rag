@@ -43,3 +43,8 @@ dev = [
 
 [tool.flake8]
 max-line-length = 88
+
+license = { file = "LICENSE" }
+authors = [
+    { name = "Nihar Malali", email = "blitznihar@gmail.com" },
+]
