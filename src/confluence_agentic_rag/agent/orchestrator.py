@@ -13,7 +13,6 @@ from typing import Any, Dict, List, Optional
 
 from sentence_transformers import SentenceTransformer
 
-
 _EMBED_MODEL: Optional[SentenceTransformer] = None
 
 
@@ -100,7 +99,10 @@ def answer(
 
     # If nothing retrieved, return grounded "no info"
     if not hits:
-        return {"answer": "I don't have enough information in Confluence.", "sources": []}
+        return {
+            "answer": "I don't have enough information in Confluence.",
+            "sources": [],
+        }
 
     prompt = _build_prompt(question, hits)
     resp = llm.generate(prompt)
